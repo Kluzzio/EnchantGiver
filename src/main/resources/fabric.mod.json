@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "enchant_giver",
+  "version": "${version}",
+
+  "name": "Enchant Giver",
+  "description": "Pre-define enchantments to tools!",
+  "authors": [
+    "LordDeatHunter"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "MIT",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "wraith.enchant_giver.EnchantGiver"
+    ]
+  },
+  "mixins": [
+    "enchant_giver.mixins.json"
+  ],
+  "accessWidener" : "enchant_giver.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

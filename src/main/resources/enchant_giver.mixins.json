@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "wraith.enchant_giver.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "EnchantmentHelperMixin",
+    ,
+    "ItemStackMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
