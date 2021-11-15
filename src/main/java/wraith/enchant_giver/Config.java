@@ -51,13 +51,17 @@ public class Config {
         try (Scanner scanner = new Scanner(file)) {
             scanner.useDelimiter("\\Z");
             output = scanner.next();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+
         }
         return output;
     }
 
     public static JsonObject getJsonObject(String json) {
+        if (json == null || json.equals("")) {
+            EnchantGiver.LOGGER.warn("No config found! Generating a new one.");
+            return null;
+        }
         try {
             return new JsonParser().parse(json).getAsJsonObject();
         } catch (Exception e) {

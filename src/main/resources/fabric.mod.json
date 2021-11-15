@@ -10,7 +10,8 @@
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/enchantgiver",
-    "sources": "https://github.com/LordDeatHunter/EnchantGiver"
+    "sources": "https://github.com/LordDeatHunter/EnchantGiver",
+    "issues": "https://github.com/LordDeatHunter/EnchantGiver/issues"
   },
 
   "license": "MIT",
@@ -30,9 +31,6 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": "1.16.x"
-  },
-  "suggests": {
-    "flamingo": "*"
+    "minecraft": ">=1.17"
   }
 }

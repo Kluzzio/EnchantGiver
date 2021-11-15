@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.minecraft.command.argument.ItemEnchantmentArgumentType;
+import net.minecraft.command.argument.EnchantmentArgumentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -68,7 +68,7 @@ public class EnchantGiver implements ModInitializer {
                 }
             ))
             .then(CommandManager.literal("add_enchant")
-                .then(CommandManager.argument("enchant", ItemEnchantmentArgumentType.itemEnchantment())
+                .then(CommandManager.argument("enchant", EnchantmentArgumentType.enchantment())
                 .then(CommandManager.argument("level", IntegerArgumentType.integer(1))
                     .requires(source -> source.hasPermissionLevel(1))
                     .executes(context -> {
@@ -77,7 +77,7 @@ public class EnchantGiver implements ModInitializer {
                             return 1;
                         }
                         Identifier item = Registry.ITEM.getId(player.getMainHandStack().getItem());
-                        Identifier enchant = Registry.ENCHANTMENT.getId(ItemEnchantmentArgumentType.getEnchantment(context, "enchant"));
+                        Identifier enchant = Registry.ENCHANTMENT.getId(EnchantmentArgumentType.getEnchantment(context, "enchant"));
                         int level = IntegerArgumentType.getInteger(context, "level");
                         EnchantsList.addEnchants(item, new HashMap<Identifier, Integer>(){{put(enchant, level);}}, false);
                         EnchantsList.saveConfig(true);
@@ -87,7 +87,7 @@ public class EnchantGiver implements ModInitializer {
                 )
             ))
             .then(CommandManager.literal("add_nbt")
-                .then(CommandManager.argument("enchant", ItemEnchantmentArgumentType.itemEnchantment())
+                .then(CommandManager.argument("enchant", EnchantmentArgumentType.enchantment())
                 .then(CommandManager.argument("level", IntegerArgumentType.integer(1))
                     .requires(source -> source.hasPermissionLevel(1))
                     .executes(context -> {
@@ -97,7 +97,7 @@ public class EnchantGiver implements ModInitializer {
                         }
                         ItemStack stack = player.getMainHandStack();
                         Identifier item = Registry.ITEM.getId(player.getMainHandStack().getItem());
-                        Identifier enchant = Registry.ENCHANTMENT.getId(ItemEnchantmentArgumentType.getEnchantment(context, "enchant"));
+                        Identifier enchant = Registry.ENCHANTMENT.getId(EnchantmentArgumentType.getEnchantment(context, "enchant"));
                         int level = IntegerArgumentType.getInteger(context, "level");
                         EnchantsList.addNBTEnchant(stack, enchant.toString(), level);
                         player.sendMessage(new LiteralText("§6[§eEnchantGiver§6] §3Successfully added " + enchant + " NBT to " + item + "!"), false);
@@ -105,7 +105,7 @@ public class EnchantGiver implements ModInitializer {
                 })
             )))
             .then(CommandManager.literal("remove_enchant")
-                .then(CommandManager.argument("enchant", ItemEnchantmentArgumentType.itemEnchantment())
+                .then(CommandManager.argument("enchant", EnchantmentArgumentType.enchantment())
                     .requires(source -> source.hasPermissionLevel(1))
                     .executes(context -> {
                         ServerPlayerEntity player = context.getSource().getPlayer();
@@ -113,7 +113,7 @@ public class EnchantGiver implements ModInitializer {
                             return 1;
                         }
                         Identifier item = Registry.ITEM.getId(player.getMainHandStack().getItem());
-                        Identifier enchant = Registry.ENCHANTMENT.getId(ItemEnchantmentArgumentType.getEnchantment(context, "enchant"));
+                        Identifier enchant = Registry.ENCHANTMENT.getId(EnchantmentArgumentType.getEnchantment(context, "enchant"));
                         EnchantsList.removeEnchant(item, enchant);
                         EnchantsList.saveConfig(true);
                         player.sendMessage(new LiteralText("§6[§eEnchantGiver§6] §3Successfully removed " + enchant + " from " + item + "!"), false);
@@ -121,7 +121,7 @@ public class EnchantGiver implements ModInitializer {
                 })
             ))
             .then(CommandManager.literal("remove_nbt")
-                .then(CommandManager.argument("enchant", ItemEnchantmentArgumentType.itemEnchantment())
+                .then(CommandManager.argument("enchant", EnchantmentArgumentType.enchantment())
                     .requires(source -> source.hasPermissionLevel(1))
                     .executes(context -> {
                         ServerPlayerEntity player = context.getSource().getPlayer();
@@ -130,7 +130,7 @@ public class EnchantGiver implements ModInitializer {
                         }
                         Identifier item = Registry.ITEM.getId(player.getMainHandStack().getItem());
                         ItemStack stack = player.getMainHandStack();
-                        Identifier enchant = Registry.ENCHANTMENT.getId(ItemEnchantmentArgumentType.getEnchantment(context, "enchant"));
+                        Identifier enchant = Registry.ENCHANTMENT.getId(EnchantmentArgumentType.getEnchantment(context, "enchant"));
                         EnchantsList.removeNBTEnchant(stack, enchant.toString());
                         player.sendMessage(new LiteralText("§6[§eEnchantGiver§6] §3Successfully removed " + enchant + " NBT from " + item + "!"), false);
                         return 1;

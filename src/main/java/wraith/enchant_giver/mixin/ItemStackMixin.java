@@ -2,8 +2,8 @@ package wraith.enchant_giver.mixin;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
@@ -21,14 +21,14 @@ import java.util.Map;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    @Shadow private CompoundTag tag;
+    @Shadow private NbtCompound tag;
 
     @Shadow public abstract Item getItem();
 
-    @Shadow public @Nullable abstract CompoundTag getSubTag(String key);
+    @Shadow public @Nullable abstract NbtCompound getSubTag(String key);
 
     @Inject(method = "getEnchantments", at = @At("HEAD"), cancellable = true)
-    public void getEnchantments(CallbackInfoReturnable<ListTag> cir) {
+    public void getEnchantments(CallbackInfoReturnable<NbtList> cir) {
         if (!EnchantGiver.SHOW_ENCHANTS) {
             return;
         }
@@ -36,7 +36,7 @@ public abstract class ItemStackMixin {
         HashMap<String, Integer> enchants = new HashMap<>();
         if (EnchantsList.itemHasEnchantments(itemID)) {
             if (tag != null && tag.contains("Enchantments")) {
-                ListTag list = tag.getList("Enchantments", 10);
+                NbtList list = tag.getList("Enchantments", 10);
                 for (int i = list.size() - 1; i >= 0; --i) {
                     String ench = list.getCompound(i).getString("id");
                     int level = list.getCompound(i).getInt("lvl");
@@ -51,16 +51,16 @@ public abstract class ItemStackMixin {
                 }
             }
         }
-        CompoundTag nbtEnchants = getSubTag("EnchantGiver");
+        NbtCompound nbtEnchants = getSubTag("EnchantGiver");
         if (nbtEnchants != null) {
             for (String enchant : nbtEnchants.getKeys()) {
                 enchants.put(enchant, nbtEnchants.getInt(enchant));
             }
         }
         if (!enchants.isEmpty()) {
-            ListTag list = new ListTag();
+            NbtList list = new NbtList();
             for (Map.Entry<String, Integer> entry : enchants.entrySet()) {
-                CompoundTag enchantTag = new CompoundTag();
+                NbtCompound enchantTag = new NbtCompound();
                 enchantTag.putString("id", entry.getKey());
                 enchantTag.putInt("lvl", entry.getValue());
                 list.add(enchantTag);

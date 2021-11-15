@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
 import java.io.File;
@@ -111,17 +111,17 @@ public class EnchantsList {
     }
 
     public static void addNBTEnchant(ItemStack stack, String enchant, Integer level) {
-        CompoundTag tag = stack.getOrCreateSubTag("EnchantGiver");
+        NbtCompound tag = stack.getOrCreateSubTag("EnchantGiver");
         tag.putInt(enchant, level);
     }
 
     public static void removeNBTEnchant(ItemStack stack, String enchant) {
-        CompoundTag tag = stack.getOrCreateSubTag("EnchantGiver");
+        NbtCompound tag = stack.getOrCreateSubTag("EnchantGiver");
         tag.remove(enchant);
     }
 
     public static void clearNBT(ItemStack stack) {
-        stack.putSubTag("EnchantGiver", new CompoundTag());
+        stack.putSubTag("EnchantGiver", new NbtCompound());
     }
 
 }
