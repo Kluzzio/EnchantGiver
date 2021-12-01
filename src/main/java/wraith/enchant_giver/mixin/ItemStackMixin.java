@@ -21,11 +21,11 @@ import java.util.Map;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    @Shadow private NbtCompound tag;
+    @Shadow private NbtCompound nbt;
 
     @Shadow public abstract Item getItem();
 
-    @Shadow public @Nullable abstract NbtCompound getSubTag(String key);
+    @Shadow public @Nullable abstract NbtCompound getSubNbt(String key);
 
     @Inject(method = "getEnchantments", at = @At("HEAD"), cancellable = true)
     public void getEnchantments(CallbackInfoReturnable<NbtList> cir) {
@@ -35,8 +35,8 @@ public abstract class ItemStackMixin {
         Identifier itemID = Registry.ITEM.getId(getItem());
         HashMap<String, Integer> enchants = new HashMap<>();
         if (EnchantsList.itemHasEnchantments(itemID)) {
-            if (tag != null && tag.contains("Enchantments")) {
-                NbtList list = tag.getList("Enchantments", 10);
+            if (nbt != null && nbt.contains("Enchantments")) {
+                NbtList list = nbt.getList("Enchantments", 10);
                 for (int i = list.size() - 1; i >= 0; --i) {
                     String ench = list.getCompound(i).getString("id");
                     int level = list.getCompound(i).getInt("lvl");
@@ -51,7 +51,7 @@ public abstract class ItemStackMixin {
                 }
             }
         }
-        NbtCompound nbtEnchants = getSubTag("EnchantGiver");
+        NbtCompound nbtEnchants = getSubNbt("EnchantGiver");
         if (nbtEnchants != null) {
             for (String enchant : nbtEnchants.getKeys()) {
                 enchants.put(enchant, nbtEnchants.getInt(enchant));

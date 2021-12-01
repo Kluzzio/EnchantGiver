@@ -111,17 +111,17 @@ public class EnchantsList {
     }
 
     public static void addNBTEnchant(ItemStack stack, String enchant, Integer level) {
-        NbtCompound tag = stack.getOrCreateSubTag("EnchantGiver");
+        NbtCompound tag = stack.getOrCreateSubNbt("EnchantGiver");
         tag.putInt(enchant, level);
     }
 
     public static void removeNBTEnchant(ItemStack stack, String enchant) {
-        NbtCompound tag = stack.getOrCreateSubTag("EnchantGiver");
+        NbtCompound tag = stack.getOrCreateSubNbt("EnchantGiver");
         tag.remove(enchant);
     }
 
     public static void clearNBT(ItemStack stack) {
-        stack.putSubTag("EnchantGiver", new NbtCompound());
+        stack.setSubNbt("EnchantGiver", new NbtCompound());
     }
 
 }
