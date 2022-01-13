@@ -7,8 +7,6 @@
     "EnchantmentHelperMixin",
     "ItemStackMixin"
   ],
-  "client": [
-  ],
   "injectors": {
     "defaultRequire": 1
   }

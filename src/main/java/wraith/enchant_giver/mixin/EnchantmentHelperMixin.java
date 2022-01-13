@@ -22,7 +22,7 @@ public class EnchantmentHelperMixin {
 
     @Inject(method = "getLevel", at = @At("HEAD"), cancellable = true)
     private static void getLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
-        NbtCompound nbtEnchants = stack.getSubTag("EnchantGiver");
+        NbtCompound nbtEnchants = stack.getSubNbt("EnchantGiver");
         Identifier enchant = Registry.ENCHANTMENT.getId(enchantment);
         if (nbtEnchants != null && enchant != null && nbtEnchants.contains(enchant.toString())) {
             cir.setReturnValue(nbtEnchants.getInt(enchant.toString()));
@@ -47,7 +47,7 @@ public class EnchantmentHelperMixin {
             int level = enchantEntry.getValue();
             enchantMap.put(ench, level);
         }
-        NbtCompound nbtEnchants = stack.getSubTag("EnchantGiver");
+        NbtCompound nbtEnchants = stack.getSubNbt("EnchantGiver");
         if (nbtEnchants != null) {
             for (String enchant : nbtEnchants.getKeys()) {
                 enchantMap.put(enchant, nbtEnchants.getInt(enchant));

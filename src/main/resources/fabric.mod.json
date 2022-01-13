@@ -6,7 +6,8 @@
   "name": "Enchant Giver",
   "description": "Pre-define enchantments to tools!",
   "authors": [
-    "LordDeatHunter"
+    "LordDeatHunter",
+    "Noaaan"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/enchantgiver",
@@ -29,8 +30,9 @@
   "accessWidener" : "enchant_giver.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": ">=0.11.3",
     "fabric": "*",
-    "minecraft": ">=1.17"
+    "minecraft": ">=1.18",
+    "java": ">=17"
   }
 }
