@@ -7,9 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -20,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(EnchantmentHelper.class)
-public abstract class EnchantmentHelperMixin {
+public class EnchantmentHelperMixin {
 
     @Inject(method = "getLevel", at = @At("HEAD"), cancellable = true)
     private static void getLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
