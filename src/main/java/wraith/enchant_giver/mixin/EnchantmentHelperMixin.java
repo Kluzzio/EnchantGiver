@@ -21,43 +21,20 @@ import java.util.Map;
 public class EnchantmentHelperMixin {
 
     @Inject(method = "getLevel", at = @At("HEAD"), cancellable = true)
-    private static void getLevel(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    private static void getLevelFromSubNbt(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         NbtCompound nbtEnchants = stack.getSubNbt("EnchantGiver");
         Identifier enchant = Registry.ENCHANTMENT.getId(enchantment);
         if (nbtEnchants != null && enchant != null && nbtEnchants.contains(enchant.toString())) {
-            int j = 0;
-            if (!stack.isEmpty()) {
-                Identifier identifier = EnchantmentHelper.getEnchantmentId(enchantment);
-                NbtList nbtList = stack.getEnchantments();
-
-                for (int i = 0; i < nbtList.size(); i++) {
-                    NbtCompound nbtCompound = nbtList.getCompound(i);
-                    Identifier identifier2 = EnchantmentHelper.getIdFromNbt(nbtCompound);
-                    if (identifier2 != null && identifier2.equals(identifier)) {
-                        j = EnchantmentHelper.getLevelFromNbt(nbtCompound);
-                    }
-                }
-
-            }
-            cir.setReturnValue(Math.max(j, nbtEnchants.getInt(enchant.toString())));
+            int levelFromNbt = getLevel(stack, enchantment);
+            cir.setReturnValue(Math.max(levelFromNbt, nbtEnchants.getInt(enchant.toString())));
             return;
         }
         if (EnchantsList.itemHasEnchantment(Registry.ITEM.getId(stack.getItem()), enchant)) {
-            int j = 0;
-            if (!stack.isEmpty()) {
-                Identifier identifier = EnchantmentHelper.getEnchantmentId(enchantment);
-                NbtList nbtList = stack.getEnchantments();
+            int levelFromNbt = getLevel(stack, enchantment);
+            int levelFromStack = EnchantsList.getEnchantmentLevel(
+                    Registry.ITEM.getId(stack.getItem()), Registry.ENCHANTMENT.getId(enchantment));
 
-                for (int i = 0; i < nbtList.size(); i++) {
-                    NbtCompound nbtCompound = nbtList.getCompound(i);
-                    Identifier identifier2 = EnchantmentHelper.getIdFromNbt(nbtCompound);
-                    if (identifier2 != null && identifier2.equals(identifier)) {
-                        j = EnchantmentHelper.getLevelFromNbt(nbtCompound);
-                    }
-                }
-
-            }
-            cir.setReturnValue(Math.max(j,EnchantsList.getEnchantmentLevel(Registry.ITEM.getId(stack.getItem()), Registry.ENCHANTMENT.getId(enchantment))));
+            cir.setReturnValue(Math.max(levelFromNbt,levelFromStack));
         }
     }
 
@@ -91,6 +68,24 @@ public class EnchantmentHelperMixin {
             newListTag.add(tag);
         }
         return newListTag;
+    }
+
+    private static int getLevel(ItemStack stack, Enchantment enchantment) {
+        if (!stack.isEmpty()) {
+            Identifier identifier = EnchantmentHelper.getEnchantmentId(enchantment);
+            NbtList enchantList = stack.getEnchantments();
+
+            for (int i = 0; i < enchantList.size(); i++) {
+                Identifier nbtId = EnchantmentHelper.getIdFromNbt(enchantList.getCompound(i));
+                if (nbtId != null && nbtId.equals(identifier)) {
+                    return EnchantmentHelper.getLevelFromNbt(enchantList.getCompound(i));
+                }
+            }
+
+        }
+
+        return 0;
+
     }
 
 }
