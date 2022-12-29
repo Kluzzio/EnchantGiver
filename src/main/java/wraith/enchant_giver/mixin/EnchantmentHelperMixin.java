@@ -5,8 +5,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,16 +23,16 @@ public class EnchantmentHelperMixin {
     @Inject(method = "getLevel", at = @At("HEAD"), cancellable = true)
     private static void getLevelFromSubNbt(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         NbtCompound nbtEnchants = stack.getSubNbt("EnchantGiver");
-        Identifier enchant = Registry.ENCHANTMENT.getId(enchantment);
+        Identifier enchant = Registries.ENCHANTMENT.getId(enchantment);
         if (nbtEnchants != null && enchant != null && nbtEnchants.contains(enchant.toString())) {
             int levelFromNbt = getLevel(stack, enchantment);
             cir.setReturnValue(Math.max(levelFromNbt, nbtEnchants.getInt(enchant.toString())));
             return;
         }
-        if (EnchantsList.itemHasEnchantment(Registry.ITEM.getId(stack.getItem()), enchant)) {
+        if (EnchantsList.itemHasEnchantment(Registries.ITEM.getId(stack.getItem()), enchant)) {
             int levelFromNbt = getLevel(stack, enchantment);
             int levelFromStack = EnchantsList.getEnchantmentLevel(
-                    Registry.ITEM.getId(stack.getItem()), Registry.ENCHANTMENT.getId(enchantment));
+                    Registries.ITEM.getId(stack.getItem()), Registries.ENCHANTMENT.getId(enchantment));
 
             cir.setReturnValue(Math.max(levelFromNbt,levelFromStack));
         }
@@ -48,7 +48,7 @@ public class EnchantmentHelperMixin {
             int level = listTag.getCompound(i).getInt("lvl");
             enchantMap.put(ench, level);
         }
-        for(Map.Entry<Identifier, Integer> enchantEntry : EnchantsList.getEnchantments(Registry.ITEM.getId(stack.getItem())).entrySet()) {
+        for(Map.Entry<Identifier, Integer> enchantEntry : EnchantsList.getEnchantments(Registries.ITEM.getId(stack.getItem())).entrySet()) {
             String ench = enchantEntry.getKey().toString();
             int level = enchantEntry.getValue();
             enchantMap.put(ench, level);
